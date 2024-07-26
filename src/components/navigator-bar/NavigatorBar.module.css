@@ -1,0 +1,60 @@
+@font-face {
+    font-family: OldenBurg;
+    src: url('../../fonts/Oldenburg-Regular.ttf');
+  }
+
+
+.main{
+    z-index: 1000;
+    width: 100%;
+    background-color: transparent;
+    position: fixed;
+    overflow: hidden;
+}
+
+.inner{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    height: 4rem;
+    gap:2.32rem;
+    width: 22.68rem;
+}
+
+.inner>div{
+    margin: 0;
+    padding: 0;
+    height: 70%;   
+    display: flex;
+    align-items: center;
+}
+
+.inner button{
+    height: 50%;
+    width: 3.93rem;
+    font-size: 0.77rem;
+    font-family: OldenBurg, sans-serif;
+    color: #01856D;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.line{
+    position: absolute;
+    bottom: 1.37rem;
+    width: 4.07rem;
+    left: -0.07rem;
+    background-color: #5B2B1B;
+    border-radius: 50px;
+    height: 0.18rem!important;
+    cursor: pointer;
+    /* transition: ease-in-out 0.3s; */
+} 
+
+.line:hover {
+    background-color: #4f2416;
+}
