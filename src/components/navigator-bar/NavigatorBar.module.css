@@ -1,0 +1,155 @@
+@font-face {
+    font-family: OldenBurg;
+    src: url('../../fonts/Oldenburg-Regular.ttf');
+  }
+
+
+.main{
+    z-index: 1000;
+    width: 100%;
+    background-color: transparent;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    height: 4rem;
+}
+
+.outer {
+    height: 2.245rem;
+    width: 83%;
+    min-width: 24rem;
+    background-color: #F2F0E7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.inner{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    gap: 2.32rem;
+    width: 22.68rem;
+}
+
+.inner>div{
+    margin: 0;
+    padding: 0;
+    height: 70%;   
+    display: flex;
+    align-items: center;
+}
+
+.inner button{
+    width: 3.93rem;
+    font-size: 0.77rem;
+    font-family: OldenBurg, sans-serif;
+    color: #01856D;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.inner button:hover {
+    color: #01473a;
+}
+
+.line{
+    position: absolute;
+    width: 3.93rem;
+    left: 0rem;
+    background-color: transparent;
+    height: 35%!important;
+    cursor: pointer;
+}
+
+.noHover{
+    position: relative;
+    background-color: #5B2B1B;
+    width: 100%;
+    height: 0.18rem!important;
+    top: 0.685rem;
+    cursor: pointer;
+}
+
+
+.noHover::after {
+    position: absolute;
+    display: block;
+    content: "";
+    height: 0.18rem!important;
+    width: 0.07rem;
+    background-color: #5B2B1B;
+    right:-0.07rem;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    transition: linear;
+}
+
+.noHover::before {
+    position: absolute;
+    display: block;
+    z-index: 2;
+    content: "";
+    height: 0.18rem!important;
+    width: 0.07rem;
+    background-color: #5B2B1B;
+    left: -0.07rem;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    transition: linear;
+}
+
+.noHover:hover, .noHover:hover::before, .noHover:hover::after {
+    background-color: #c74920;
+}
+
+@media only screen and (aspect-ratio < 1) {
+    .main {
+        height: 7.5%
+    }
+    .outer {
+        min-width: unset;
+        width: 95%;
+        height: 90%;
+        border-radius: 5px;
+    }
+    .inner {
+        gap: 0.409rem;
+        width: 18.293rem;
+    }
+
+    .inner button{
+        width: 4.2665rem;
+        font-size: 0.853rem;
+    }
+
+    .line {
+        width: 4.2665rem;
+        height: 70%!important;
+    }
+
+    .noHover {
+        height: 30%!important;
+        top: 2.5vh;
+    }
+
+    .noHover:after {
+        height: 100%!important;
+        width: 0.09rem;
+        right:-0.09rem;
+    }
+
+    .noHover:before {
+        height: 100%!important;
+        width: 0.09rem;
+        right:-0.09rem;
+    }
+}

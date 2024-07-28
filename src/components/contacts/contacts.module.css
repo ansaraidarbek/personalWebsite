@@ -1,0 +1,23 @@
+.outer {
+    display: none;
+}
+
+
+@media only screen and (aspect-ratio < 1) {
+    .outer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 15.4vh;
+        background-color: yellow;
+        position: fixed;
+        bottom: 0;
+    }
+    
+    .inner {
+        width: 97.16%;
+        background-color: green;
+        height: 79.32%;
+    }
+}
