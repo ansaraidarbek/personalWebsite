@@ -1,5 +1,5 @@
 html{
-  font-size: 2vw;
+  font-size: 4.14vh;
 }
 
 *{
@@ -21,10 +21,9 @@ body{
 
 .App{
   width: 100vw;
-  height: calc(400vh - 12rem);
+  height: 100vh;
   overflow: auto;
   display: block;
-  overflow: hidden;
   position: relative;
 
   /* background: url("./images/blackRose_background.png"); */
@@ -32,9 +31,6 @@ body{
   background-repeat: no-repeat;
   background-size: auto 100%;
   background-position: center;
-
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
 }
 
 .main{
@@ -53,4 +49,15 @@ body{
 
 .first{
   top:17vh
+}
+
+
+@media only screen and (aspect-ratio < 1) {
+  html{
+    font-size: 5vw;
+  }
+}
+
+@media only screen and (aspect-ratio > 2) {
+  /*do smth*/
 }

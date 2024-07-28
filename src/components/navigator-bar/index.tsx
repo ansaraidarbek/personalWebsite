@@ -1,55 +1,150 @@
-import { useEffect, useRef } from 'react'
-import NavButton from './NavButton'
-import NB from './NavigatorBar.module.css'
-const NavigatorBar = () =>{
-    let observe = useRef<HTMLDivElement>(null)
+import { useEffect, useRef, useState, RefObject, useCallback, memo } from 'react'
+import NavButton from './navButton'
+import NB from './navigatorBar.module.css'
+
+interface Store {
+    contentTop : string|number;
+    contentHeight : string|number; 
+    trackWidth : string|number; 
+    thumbWidth : string|number;
+    clientWidth : string|number,
+    clientHeight : string|number
+}
+
+const numberOfSections = 4;
+
+const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement>}) =>{
+    const scrollThumbRef = useRef<HTMLDivElement|any>(null);
+    const scrollTrackRef = useRef<HTMLDivElement|any>(null);
+    const [scrollStartPosition, setScrollStartPosition] = useState<number | null|any>(null);
+    const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
+    const [isDragging, setIsDragging] = useState(false);
+  
 
     const clicked = (num:number)=>{
-        if(observe.current){
-            let w =( Math.max(document.documentElement.clientWidth, window.innerWidth || 0) * 8 )/ 100;
-            let display = document.documentElement.scrollHeight - w;
+        // console.log('clicked');
+        if(contentRef.current){
+            // find display
+            let display = (contentRef.current.scrollHeight -  scrollTrackRef.current.clientHeight);
             let current = (num/4) * display;
             // document.documentElement.scrollTop = current;
-            window.scrollTo({
+            contentRef.current.scrollTo({
                 top: current,
                 behavior: 'smooth'
             });
         }
     }
 
-    useEffect (() => {
-        document.documentElement.scrollTop = 0;
-        console.log(document.documentElement.scrollTop);
-        const checkNav = () => {
-            let h : HTMLElement = document.documentElement ;
-            let b : HTMLElement = document.body;
-            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight);
-            if ( observe.current ) {
-                console.log(document.documentElement.scrollTop);
-                let pos = (percent * 18.68)-0.07;
-                observe.current.style.left = pos + "rem";
+    const isConsistent = useCallback((store : Store) => {
+        // console.log('isConsistent');
+        for (const key of Object.keys(store) as Array<keyof Store>) {
+            if (+store[key] !== 0 && !+store[key]) {
+                return false;
+            } else {
+                store[key] = +store[key];
             }
         }
+        return true;
+    }, [])
 
-        window.addEventListener("scroll", checkNav);
+    const handleThumbPosition = useCallback(() => {
+        // console.log('handleThumbPosition');
+        if (!contentRef.current || !scrollTrackRef.current || !scrollThumbRef.current) {
+          return;
+        }
+
+        const store = { contentTop : contentRef.current.scrollTop,
+                        contentHeight : contentRef.current.scrollHeight, 
+                        clientWidth : contentRef.current.clientWidth,
+                        clientHeight : contentRef.current.clientHeight, 
+                        trackWidth : scrollTrackRef.current.clientWidth, 
+                        thumbWidth : scrollThumbRef.current.clientWidth};
+        if (isConsistent(store)) {
+            // find the percent of tip/ (content - visible content)
+            const percent = ((store.contentTop)  / (store.contentHeight - store.clientHeight));
+            // find font size
+            const el = document.documentElement;
+            const style = window.getComputedStyle(el, null).getPropertyValue('font-size');
+            const fontSize = parseFloat(style); 
+            // obtain width of track - thumb 
+            const trackWidthRem = (store.trackWidth - store.thumbWidth) / fontSize;
+            // find new left
+            const newLeft = (percent * trackWidthRem);
+            scrollThumbRef.current.style.left = newLeft + "rem";
+        } else {
+            // console.log("handleThumbPosition problems with numeric elems!");
+        }
+      }, [contentRef, scrollTrackRef, scrollThumbRef]);
+
+    useEffect (() => {
+        contentRef.current?.addEventListener('scroll', handleThumbPosition);
 
         return () => {
-            window.removeEventListener("scroll", checkNav);
+            contentRef.current?.removeEventListener('scroll', handleThumbPosition);
         };
-    }, [])
+
+    }, []);
+
+    const handleThumbMousedown = useCallback((e:any) => {
+        // console.log('handleThumbMousedown');
+        e.preventDefault();
+        e.stopPropagation();
+        if (contentRef.current) {
+            setScrollStartPosition(e.clientX);
+            setInitialScrollTop(contentRef.current.scrollTop);
+            setIsDragging(true);
+        };
+    }, []);
+
+    const handleThumbMouseup = useCallback((e:any) => {
+        // console.log('handleThumbMouseup');
+        e.preventDefault();
+        e.stopPropagation();
+        if (isDragging) {
+            setIsDragging(false);
+        }
+    }, [isDragging]);
+    
+    const handleThumbMousemove = useCallback((e:any) => {
+        // console.log('handleThumbMousemove');
+        e.preventDefault();
+        e.stopPropagation();
+        if (isDragging && contentRef.current) {
+            const {scrollHeight: contentScrollHeight, offsetHeight: contentOffsetHeight} = contentRef.current;
+            const {clientWidth : trackWidth, clientHeight : trackheight} = scrollTrackRef.current;
+            const deltaY = (e.clientX - scrollStartPosition) * ((contentScrollHeight - numberOfSections * trackheight) / trackWidth);
+            const newScrollTop = Math.min(initialScrollTop + deltaY, contentScrollHeight - contentOffsetHeight);
+            contentRef.current.scrollTop = newScrollTop;
+        }
+        }, [isDragging, scrollStartPosition]);
+
+
+    // Listen for mouse events to handle scrolling by dragging the thumb
+    useEffect(() => {
+        document.addEventListener('mousemove', handleThumbMousemove);
+        document.addEventListener('mouseup', handleThumbMouseup);
+        document.addEventListener('mouseleave', handleThumbMouseup);
+        return () => {
+            document.removeEventListener('mousemove', handleThumbMousemove);
+            document.removeEventListener('mouseup', handleThumbMouseup);
+            document.removeEventListener('mouseleave', handleThumbMouseup);
+        };
+    }, [handleThumbMousemove, handleThumbMouseup]);
 
     return (
         <div className={NB.main}>
-            <div className={NB.inner}>
+            <div ref={scrollTrackRef} className={NB.inner} >
                 <NavButton title={"About me"} clicked = {clicked} num={0}/>
                 <NavButton title={"Skills"} clicked = {clicked} num={1}/>
                 <NavButton title={"Journey"} clicked = {clicked} num={2}/>
                 <NavButton title={"Projects"} clicked = {clicked} num={3}/>
-                <div ref={observe} className={NB.line}></div>
+                <div ref={scrollThumbRef} className={NB.line}>
+                    <div onMouseDown={handleThumbMousedown} className={NB.noHover}></div>
+                </div>
             </div>
         </div>
     )
 
-}
+})
 
 export default NavigatorBar
