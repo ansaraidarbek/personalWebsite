@@ -15,7 +15,8 @@ const numberOfSections = 4;
 
 const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement>}) =>{
     const scrollThumbRef = useRef<HTMLDivElement|any>(null);
-    const scrollTrackRef = useRef<HTMLDivElement|any>(null);
+    const scrollTrackOuterRef = useRef<HTMLDivElement|any>(null);
+    const scrollTrackInnerRef = useRef<HTMLDivElement|any>(null);
     const [scrollStartPosition, setScrollStartPosition] = useState<number | null|any>(null);
     const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
     const [isDragging, setIsDragging] = useState(false);
@@ -28,9 +29,12 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
             const isHeightBased = (contentRef.current.clientHeight / contentRef.current.clientWidth) > 1;
 
             // find display
-            let widthDisplay = (contentRef.current.scrollHeight -  scrollTrackRef.current.clientHeight);
-            let heightDisplay = ((contentRef.current.scrollHeight - (contentRef.current.clientHeight * 0.154)) -  scrollTrackRef.current.clientHeight);
+            let widthDisplay = (contentRef.current.scrollHeight - scrollTrackOuterRef.current.clientHeight);
+            console.log(contentRef.current.scrollHeight, scrollTrackOuterRef.current.clientHeight)
+            let heightDisplay = ((contentRef.current.scrollHeight - (contentRef.current.clientHeight * 0.154)) -  scrollTrackOuterRef.current.clientHeight);
+            console.log(isHeightBased);
             const display = isHeightBased ? heightDisplay : widthDisplay;
+            console.log(display)
             let current = (num / 4) * display;
 
             // document.documentElement.scrollTop = current;
@@ -55,7 +59,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
 
     const handleThumbPosition = useCallback(() => {
         // console.log('handleThumbPosition');
-        if (!contentRef.current || !scrollTrackRef.current || !scrollThumbRef.current) {
+        if (!contentRef.current || !scrollTrackInnerRef.current || !scrollThumbRef.current) {
           return;
         }
 
@@ -63,7 +67,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
                         contentHeight : contentRef.current.scrollHeight, 
                         clientWidth : contentRef.current.clientWidth,
                         clientHeight : contentRef.current.clientHeight, 
-                        trackWidth : scrollTrackRef.current.clientWidth, 
+                        trackWidth : scrollTrackInnerRef.current.clientWidth, 
                         thumbWidth : scrollThumbRef.current.clientWidth};
         if (isConsistent(store)) {
             // find font size
@@ -84,7 +88,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
         } else {
             console.log("handleThumbPosition problems with numeric elems!");
         }
-      }, [contentRef, scrollTrackRef, scrollThumbRef]);
+      }, [contentRef, scrollTrackInnerRef, scrollThumbRef]);
 
     useEffect (() => {
         contentRef.current?.addEventListener('scroll', handleThumbPosition);
@@ -121,7 +125,8 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
         e.stopPropagation();
         if (isDragging && contentRef.current) {
             const {scrollHeight: contentScrollHeight, offsetHeight: contentOffsetHeight} = contentRef.current;
-            const {clientWidth : trackWidth, clientHeight : trackheight} = scrollTrackRef.current;
+            const {clientWidth : trackWidth} = scrollTrackInnerRef.current;
+            const {clientHeight : trackheight} = scrollTrackOuterRef.current;
             const deltaY = (e.clientX - scrollStartPosition) * ((contentScrollHeight - numberOfSections * trackheight) / trackWidth);
             const newScrollTop = Math.min(initialScrollTop + deltaY, contentScrollHeight - contentOffsetHeight);
             contentRef.current.scrollTop = newScrollTop;
@@ -142,9 +147,9 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     }, [handleThumbMousemove, handleThumbMouseup]);
 
     return (
-        <div className={NB.main}>
+        <div  ref= {scrollTrackOuterRef} className={NB.main}>
             <div className={NB.outer}>
-                <div ref={scrollTrackRef} className={NB.inner} >
+                <div ref={scrollTrackInnerRef} className={NB.inner} >
                     <NavButton title={"About me"} clicked = {clicked} num={0}/>
                     <NavButton title={"Skills"} clicked = {clicked} num={1}/>
                     <NavButton title={"Journey"} clicked = {clicked} num={2}/>
