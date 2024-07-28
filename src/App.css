@@ -41,11 +41,11 @@ body{
   display: block;
 }
 
-.content{
+/* .content{
   width: 100%;
   height: calc(100vh - 4rem);
   color: white;
-}
+} */
 
 .first{
   top:17vh
@@ -55,6 +55,11 @@ body{
 @media only screen and (aspect-ratio < 1) {
   html{
     font-size: 5vw;
+  }
+
+  .main {
+    top: 7.5vh;
+    height: calc(400vh - 76.2vh);
   }
 }
 

@@ -1,7 +1,11 @@
 import './App.css';
 import { useRef } from 'react'
 import NavigatorBar from './components/navigator-bar';
-import AboutMe from './components/about-me';
+import AboutMeSection from './components/about-me';
+import JourneySection from './components/journey';
+import SkillsSection from './components/skills';
+import ProjectsSection from './components/projects';
+import ContactInformation from './components/contacts';
 
 function App() {
 
@@ -9,12 +13,13 @@ function App() {
   return (
     <div ref = {contentRef} className="App">
       <NavigatorBar contentRef = {contentRef}/>
-      <div className="main">
-        <AboutMe/>
-        <section id="skills" className="content">Hello from second<div></div></section>
-        <section id="journey" className="content">Hello from third<div></div></section>
-        <section id="projects" className="content">Hello from fourth<div></div></section>
-      </div>
+      <main className="main">
+        <AboutMeSection/>
+        <SkillsSection/>
+        <JourneySection/>
+        <ProjectsSection/>
+      </main>
+      <ContactInformation/>
     </div>
   );
 }

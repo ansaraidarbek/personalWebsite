@@ -24,9 +24,15 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     const clicked = (num:number)=>{
         // console.log('clicked');
         if(contentRef.current){
+            // find device is heightBased -> mobile 
+            const isHeightBased = (contentRef.current.clientHeight / contentRef.current.clientWidth) > 1;
+
             // find display
-            let display = (contentRef.current.scrollHeight -  scrollTrackRef.current.clientHeight);
-            let current = (num/4) * display;
+            let widthDisplay = (contentRef.current.scrollHeight -  scrollTrackRef.current.clientHeight);
+            let heightDisplay = ((contentRef.current.scrollHeight - (contentRef.current.clientHeight * 0.154)) -  scrollTrackRef.current.clientHeight);
+            const display = isHeightBased ? heightDisplay : widthDisplay;
+            let current = (num / 4) * display;
+
             // document.documentElement.scrollTop = current;
             contentRef.current.scrollTo({
                 top: current,
@@ -60,19 +66,23 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
                         trackWidth : scrollTrackRef.current.clientWidth, 
                         thumbWidth : scrollThumbRef.current.clientWidth};
         if (isConsistent(store)) {
-            // find the percent of tip/ (content - visible content)
-            const percent = ((store.contentTop)  / (store.contentHeight - store.clientHeight));
             // find font size
             const el = document.documentElement;
             const style = window.getComputedStyle(el, null).getPropertyValue('font-size');
-            const fontSize = parseFloat(style); 
+            const fontSize = parseFloat(style);
+
+            // find the percent of tip/ (content - visible content)
+            // const contentheight = isHeightBased ? store.contentHeight : store.contentHeight;
+            const percent = ((store.contentTop)  / (store.contentHeight - store.clientHeight));
+
             // obtain width of track - thumb 
             const trackWidthRem = (store.trackWidth - store.thumbWidth) / fontSize;
+
             // find new left
             const newLeft = (percent * trackWidthRem);
             scrollThumbRef.current.style.left = newLeft + "rem";
         } else {
-            // console.log("handleThumbPosition problems with numeric elems!");
+            console.log("handleThumbPosition problems with numeric elems!");
         }
       }, [contentRef, scrollTrackRef, scrollThumbRef]);
 
@@ -133,13 +143,15 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
 
     return (
         <div className={NB.main}>
-            <div ref={scrollTrackRef} className={NB.inner} >
-                <NavButton title={"About me"} clicked = {clicked} num={0}/>
-                <NavButton title={"Skills"} clicked = {clicked} num={1}/>
-                <NavButton title={"Journey"} clicked = {clicked} num={2}/>
-                <NavButton title={"Projects"} clicked = {clicked} num={3}/>
-                <div ref={scrollThumbRef} className={NB.line}>
-                    <div onMouseDown={handleThumbMousedown} className={NB.noHover}></div>
+            <div className={NB.outer}>
+                <div ref={scrollTrackRef} className={NB.inner} >
+                    <NavButton title={"About me"} clicked = {clicked} num={0}/>
+                    <NavButton title={"Skills"} clicked = {clicked} num={1}/>
+                    <NavButton title={"Journey"} clicked = {clicked} num={2}/>
+                    <NavButton title={"Projects"} clicked = {clicked} num={3}/>
+                    <div ref={scrollThumbRef} className={NB.line}>
+                        <div onMouseDown={handleThumbMousedown} className={NB.noHover}></div>
+                    </div>
                 </div>
             </div>
         </div>
