@@ -31,4 +31,8 @@
   
 @media only screen and (aspect-ratio > 2) {
 /*do smth*/
+.inner {
+    width: 44.203rem;
+    height: 19.334rem;
+}
 }

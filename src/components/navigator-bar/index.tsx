@@ -14,27 +14,25 @@ interface Store {
 const numberOfSections = 4;
 
 const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement>}) =>{
-    const scrollThumbRef = useRef<HTMLDivElement|any>(null);
-    const scrollTrackOuterRef = useRef<HTMLDivElement|any>(null);
-    const scrollTrackInnerRef = useRef<HTMLDivElement|any>(null);
-    const [scrollStartPosition, setScrollStartPosition] = useState<number | null|any>(null);
+    const scrollThumbRef = useRef<HTMLDivElement|null>(null);
+    const scrollTrackOuterRef = useRef<HTMLDivElement|null>(null);
+    const scrollTrackInnerRef = useRef<HTMLDivElement|null>(null);
+    const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
     const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
     const [isDragging, setIsDragging] = useState(false);
   
 
     const clicked = (num:number)=>{
         // console.log('clicked');
-        if(contentRef.current){
+        if(contentRef && contentRef.current && scrollTrackOuterRef && scrollTrackOuterRef.current){
             // find device is heightBased -> mobile 
             const isHeightBased = (contentRef.current.clientHeight / contentRef.current.clientWidth) > 1;
 
             // find display
             let widthDisplay = (contentRef.current.scrollHeight - scrollTrackOuterRef.current.clientHeight);
-            console.log(contentRef.current.scrollHeight, scrollTrackOuterRef.current.clientHeight)
             let heightDisplay = ((contentRef.current.scrollHeight - (contentRef.current.clientHeight * 0.154)) -  scrollTrackOuterRef.current.clientHeight);
-            console.log(isHeightBased);
             const display = isHeightBased ? heightDisplay : widthDisplay;
-            console.log(display)
+
             let current = (num / 4) * display;
 
             // document.documentElement.scrollTop = current;
@@ -74,6 +72,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
             const el = document.documentElement;
             const style = window.getComputedStyle(el, null).getPropertyValue('font-size');
             const fontSize = parseFloat(style);
+            console.log(fontSize);
 
             // find the percent of tip/ (content - visible content)
             // const contentheight = isHeightBased ? store.contentHeight : store.contentHeight;
@@ -123,7 +122,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
         // console.log('handleThumbMousemove');
         e.preventDefault();
         e.stopPropagation();
-        if (isDragging && contentRef.current) {
+        if (isDragging && contentRef.current && scrollTrackInnerRef.current && scrollTrackOuterRef.current && scrollStartPosition !== null) {
             const {scrollHeight: contentScrollHeight, offsetHeight: contentOffsetHeight} = contentRef.current;
             const {clientWidth : trackWidth} = scrollTrackInnerRef.current;
             const {clientHeight : trackheight} = scrollTrackOuterRef.current;
@@ -155,7 +154,9 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
                     <NavButton title={"Journey"} clicked = {clicked} num={2}/>
                     <NavButton title={"Projects"} clicked = {clicked} num={3}/>
                     <div ref={scrollThumbRef} className={NB.line}>
-                        <div onMouseDown={handleThumbMousedown} className={NB.noHover}></div>
+                        <div onMouseDown={handleThumbMousedown} className={NB.noHover}>
+                            <div onMouseDown={handleThumbMousedown} className={NB.track}></div>
+                        </div>
                     </div>
                 </div>
             </div>

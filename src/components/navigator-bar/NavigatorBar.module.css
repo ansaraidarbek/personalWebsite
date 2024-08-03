@@ -72,39 +72,19 @@
 
 .noHover{
     position: relative;
-    background-color: #5B2B1B;
     width: 100%;
     height: 0.18rem!important;
     top: 0.685rem;
     cursor: pointer;
 }
 
-
-.noHover::after {
-    position: absolute;
-    display: block;
-    content: "";
-    height: 0.18rem!important;
-    width: 0.07rem;
-    background-color: #5B2B1B;
-    right:-0.07rem;
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
-    transition: linear;
-}
-
-.noHover::before {
-    position: absolute;
-    display: block;
-    z-index: 2;
-    content: "";
-    height: 0.18rem!important;
-    width: 0.07rem;
-    background-color: #5B2B1B;
+.track {
+    position: relative;
     left: -0.07rem;
-    border-top-left-radius: 50px;
-    border-bottom-left-radius: 50px;
-    transition: linear;
+    background-color: #5B2B1B;
+    width: calc(100% + 0.14rem);
+    height: 100%;
+    border-radius: 50px;
 }
 
 .noHover:hover, .noHover:hover::before, .noHover:hover::after {
@@ -141,15 +121,19 @@
         top: 2.5vh;
     }
 
-    .noHover:after {
-        height: 100%!important;
-        width: 0.09rem;
-        right:-0.09rem;
-    }
-
-    .noHover:before {
-        height: 100%!important;
-        width: 0.09rem;
-        right:-0.09rem;
+    .track {
+        position: relative;
+        left: -0.09rem;
+        background-color: #5B2B1B;
+        width: calc(100% + 0.18rem);
+        height: 100%;
+        border-radius: 50px;
     }
 }
+
+@media only screen and (aspect-ratio > 2) {
+    /*do smth*/
+    .outer {
+        width: 40.097rem;
+    }
+    }
