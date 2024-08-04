@@ -23,9 +23,9 @@ const DeviceSlice = createSlice({
     reducers: {
       changeDevice: (state) => {
         const isMobile = handleDevice();
-        if (isMobile !== state.value) {
+        // if (isMobile !== state.value) {
           state.value = isMobile;
-        }
+        // }
       }
     }
 });

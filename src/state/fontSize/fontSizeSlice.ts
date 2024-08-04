@@ -23,9 +23,7 @@ const fontSizeSlice = createSlice({
     reducers: {
         changeFontSize: (state) => {
         const newFontSize = findFontSize();
-        if (newFontSize !== state.value) {
-          state.value = newFontSize;
-        }
+        state.value = newFontSize;
       }
     }
 });

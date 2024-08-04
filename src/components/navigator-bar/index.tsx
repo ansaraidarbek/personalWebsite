@@ -24,6 +24,8 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     const [isDragging, setIsDragging] = useState(false);
     const isMobile = useSelector((state:RootState) => state.device.value);
     const fontSize = useSelector((state:RootState) => state.fontSize.value);
+    // console.log('hello from NavBar', isMobile, fontSize);
+  
 
     const clicked = (num:number)=>{
         // console.log('clicked');

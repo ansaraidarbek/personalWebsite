@@ -17,7 +17,7 @@ const AboutMeSection = () => {
     const [text, setText] = useState('');
     const [delta, setDelta] = useState(300 - Math.random() * 10);
     const isMobile = useSelector((state:RootState) => state.device.value);
-    console.log(isMobile);
+    // console.log('hello from aboutMe', isMobile);
     const period = 1000;
     // const targetTextBoxRef = useRef<HTMLDivElement|null>(null);
     // const targetTextRef = useRef<HTMLDivElement|null>(null);
