@@ -1,4 +1,4 @@
-import CB from '../shared-css-files/contentOuterBox.module.css'
+import CB from '../shared-css-files/contentOuterBox.module.css';
 import PP from './projects.module.css';
 
 const ProjectsSection = () => {

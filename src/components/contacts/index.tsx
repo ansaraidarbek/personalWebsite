@@ -1,4 +1,4 @@
-import CI from './contacts.module.css'
+import CI from './contacts.module.css';
 
 const ContactInformation = () => {
     return (    

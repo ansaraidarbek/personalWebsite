@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState, RefObject, useCallback, memo } from 'react'
-import NavButton from './navButton'
-import NB from './navigatorBar.module.css'
+import { useEffect, useRef, useState, RefObject, useCallback, memo } from 'react';
+import NavButton from './navButton';
+import NB from './navigatorBar.module.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../state/store';
 
 interface Store {
     contentTop : string|number;
@@ -20,18 +22,16 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
     const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
     const [isDragging, setIsDragging] = useState(false);
-  
+    const isMobile = useSelector((state:RootState) => state.device.value);
+    const fontSize = useSelector((state:RootState) => state.fontSize.value);
 
     const clicked = (num:number)=>{
         // console.log('clicked');
         if(contentRef && contentRef.current && scrollTrackOuterRef && scrollTrackOuterRef.current){
-            // find device is heightBased -> mobile 
-            const isHeightBased = (contentRef.current.clientHeight / contentRef.current.clientWidth) > 1;
-
             // find display
             let widthDisplay = (contentRef.current.scrollHeight - scrollTrackOuterRef.current.clientHeight);
             let heightDisplay = ((contentRef.current.scrollHeight - (contentRef.current.clientHeight * 0.154)) -  scrollTrackOuterRef.current.clientHeight);
-            const display = isHeightBased ? heightDisplay : widthDisplay;
+            const display = isMobile ? heightDisplay : widthDisplay;
 
             let current = (num / 4) * display;
 
@@ -68,14 +68,9 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
                         trackWidth : scrollTrackInnerRef.current.clientWidth, 
                         thumbWidth : scrollThumbRef.current.clientWidth};
         if (isConsistent(store)) {
-            // find font size
-            const el = document.documentElement;
-            const style = window.getComputedStyle(el, null).getPropertyValue('font-size');
-            const fontSize = parseFloat(style);
-            console.log(fontSize);
 
             // find the percent of tip/ (content - visible content)
-            // const contentheight = isHeightBased ? store.contentHeight : store.contentHeight;
+            // const contentheight = isMobile ? store.contentHeight : store.contentHeight;
             const percent = ((store.contentTop)  / (store.contentHeight - store.clientHeight));
 
             // obtain width of track - thumb 
