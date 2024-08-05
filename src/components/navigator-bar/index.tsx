@@ -27,7 +27,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     // console.log('hello from NavBar', isMobile, fontSize);
   
 
-    const clicked = (num:number)=>{
+    const clicked = useCallback((num:number)=>{
         // console.log('clicked');
         if(contentRef && contentRef.current && scrollTrackOuterRef && scrollTrackOuterRef.current){
             // find display
@@ -43,7 +43,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
                 behavior: 'smooth'
             });
         }
-    }
+    }, [contentRef, scrollTrackOuterRef, isMobile]);
 
     const isConsistent = useCallback((store : Store) => {
         // console.log('isConsistent');
@@ -84,7 +84,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
         } else {
             console.log("handleThumbPosition problems with numeric elems!");
         }
-      }, [contentRef, scrollTrackInnerRef, scrollThumbRef]);
+      }, [contentRef, scrollTrackInnerRef, scrollThumbRef, fontSize]);
 
     useEffect (() => {
         contentRef.current?.addEventListener('scroll', handleThumbPosition);
@@ -93,7 +93,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
             contentRef.current?.removeEventListener('scroll', handleThumbPosition);
         };
 
-    }, []);
+    }, [fontSize]);
 
     const handleThumbMousedown = useCallback((e:any) => {
         // console.log('handleThumbMousedown');

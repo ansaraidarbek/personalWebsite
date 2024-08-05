@@ -58,7 +58,7 @@ const AboutMeSection = () => {
         setText(updateText);
 
         if (isDeleting) {
-            setDelta(prevDelta => prevDelta / 2);
+            setDelta(prevDelta => prevDelta / 1.4);
         }
 
         if (!isDeleting && updateText === fullText) {
