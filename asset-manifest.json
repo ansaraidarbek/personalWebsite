@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "./static/css/main.dbc6d7d8.css",
-    "main.js": "./static/js/main.2cd0a4e7.js",
+    "main.js": "./static/js/main.0937f994.js",
     "static/media/Oldenburg-Regular.ttf": "./static/media/Oldenburg-Regular.e2df163dd6021d6c89fb.ttf",
     "index.html": "./index.html",
     "main.dbc6d7d8.css.map": "./static/css/main.dbc6d7d8.css.map",
-    "main.2cd0a4e7.js.map": "./static/js/main.2cd0a4e7.js.map"
+    "main.0937f994.js.map": "./static/js/main.0937f994.js.map"
   },
   "entrypoints": [
     "static/css/main.dbc6d7d8.css",
-    "static/js/main.2cd0a4e7.js"
+    "static/js/main.0937f994.js"
   ]
 }
