@@ -16,8 +16,14 @@
     }
     
     .inner {
-        width: 97.16%;
+        width: 54.423vh;
         background-color: green;
         height: 79.32%;
+    }
+}
+
+@media only screen and (aspect-ratio < 0.562) {
+    .inner {
+        width: 97.16%;
     }
 }

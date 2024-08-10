@@ -1,5 +1,5 @@
 :root {
-    --innerWidth: 91.5%;
+    --innerWidth: 18.358rem;
 }
 
 .outer {
@@ -12,9 +12,10 @@
 }
 
 .inner {
-    background-color: red;
-    width: var(--innerWidth);
-    height: 19.334rem;
+    flex-basis: var(--innerWidth);
+    flex-grow: 0.866;
+    height: 19.086rem;
+    background-color: blueviolet;
 }
 
 @media only screen and (aspect-ratio < 1) {
@@ -24,15 +25,26 @@
     }
 
     .inner {
-        width: 96.8%;
+        flex-basis: 54.423vh;
+        flex-grow: unset;
+        background-color: blue!important;
         height: 93.38%;
     }
 }
-  
-@media only screen and (aspect-ratio > 2) {
-/*do smth*/
-.inner {
-    width: 44.203rem;
-    height: 19.334rem;
+
+@media only screen and (aspect-ratio < 0.562) {
+
+    .inner {
+        flex-basis: 96.8%;
+        background-color: green!important;
+    }
 }
+  
+@media only screen and (aspect-ratio > 2.057) {
+/*do smth*/
+    .inner {
+        flex-basis: 45.452rem;
+        flex-grow: unset;
+        background-color: red!important;
+    }
 }

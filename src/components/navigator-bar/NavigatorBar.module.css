@@ -18,8 +18,8 @@
 
 .outer {
     height: 2.245rem;
-    width: 83%;
-    min-width: 24rem;
+    flex-basis: 21.404rem;
+    flex-grow: 0.199;
     background-color: #F2F0E7;
     display: flex;
     justify-content: center;
@@ -31,11 +31,10 @@
 .inner{
     position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    margin: 0 auto;
-    gap: 2.32rem;
-    width: 22.68rem;
+    margin: 0 0.323rem;
+    width: 100%;
 }
 
 .inner>div{
@@ -46,8 +45,11 @@
     align-items: center;
 }
 
+.line, .inner button {
+    width: 3.879rem;
+}
+
 .inner button{
-    width: 3.93rem;
     font-size: 0.77rem;
     font-family: OldenBurg, sans-serif;
     color: #01856D;
@@ -63,7 +65,6 @@
 
 .line{
     position: absolute;
-    width: 3.93rem;
     left: 0rem;
     background-color: transparent;
     height: 100%!important;
@@ -97,23 +98,23 @@
     }
     .outer {
         min-width: unset;
-        width: 95%;
+        flex-basis: 95%;
         height: 90%;
         border-radius: 5px;
+        flex-grow: unset;
     }
     .inner {
-        gap: 0.409rem;
+        gap: unset;
         width: 18.293rem;
+        justify-content: space-between
+    }
+
+    .line, .inner button {
+        width: 11.994vh;
     }
 
     .inner button{
-        width: 4.2665rem;
-        font-size: 0.853rem;
-    }
-
-    .line {
-        width: 4.2665rem;
-        height: 70%!important;
+        font-size: 2.398vh;
     }
 
     .noHover {
@@ -131,9 +132,24 @@
     }
 }
 
-@media only screen and (aspect-ratio > 2) {
+@media only screen and (aspect-ratio < 0.562) {
+    .inner {
+        gap: 0.409rem;
+    }
+
+    .inner button{
+        font-size: 0.853rem;
+    }
+
+    .inner button, .line {
+        width: 4.2665rem;
+    }
+}
+
+@media only screen and (aspect-ratio > 2.057) {
     /*do smth*/
     .outer {
-        width: 40.097rem;
+        flex-basis: 27.026rem;
+        flex-grow: unset;
     }
-    }
+}

@@ -24,7 +24,8 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     const [isDragging, setIsDragging] = useState(false);
     const isMobile = useSelector((state:RootState) => state.device.value);
     const fontSize = useSelector((state:RootState) => state.fontSize.value);
-    const isResizing = useRef(false);
+    console.log(fontSize);
+    const isScrolling = useRef(true);
     const percentPast = useRef<number>(0);
     // console.log('hello from NavBar', isMobile, fontSize);
   
@@ -60,7 +61,6 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     }, [])
 
     const handleThumbPositionOnScroll = useCallback(() => {
-        // console.log('handleThumbPosition');
         if (!contentRef.current || !scrollTrackInnerRef.current || !scrollThumbRef.current) {
           return;
         }
@@ -71,38 +71,49 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
                         clientHeight : contentRef.current.clientHeight, 
                         trackWidth : scrollTrackInnerRef.current.clientWidth, 
                         thumbWidth : scrollThumbRef.current.clientWidth};
-        if (isConsistent(store) && !isResizing.current) {
+        if (isConsistent(store) && isScrolling.current) {
 
             // find the percent of tip/ (content - visible content)
             // const contentheight = isMobile ? store.contentHeight : store.contentHeight;
-            const percent = ((store.contentTop)  / (store.contentHeight - store.clientHeight));
-            percentPast.current = percent;
+            percentPast.current = ((store.contentTop)  / (store.contentHeight - store.clientHeight));
 
             // obtain width of track - thumb 
             const trackWidthRem = (store.trackWidth - store.thumbWidth) / fontSize;
 
             // find new left
-            const newLeft = (percent * trackWidthRem);
+            const newLeft = (percentPast.current * trackWidthRem);
             scrollThumbRef.current.style.left = newLeft + "rem";
-        } else if (isResizing.current) {
-            isResizing.current = false;
+        } else if (!isScrolling.current) {
+            isScrolling.current = true;
         } else {
             console.log("handleThumbPosition problems with numeric elems!");
         }
-      }, [contentRef, scrollTrackInnerRef, scrollThumbRef, fontSize, isResizing]);
+      }, [contentRef, scrollTrackInnerRef, scrollThumbRef, fontSize, isScrolling]);
 
-    const handleThumbPositionOnResize = useCallback(() => {
-        //console.log("handleThumbPositionOnResize");
-        if (!scrollTrackInnerRef.current || !scrollThumbRef.current || !contentRef.current) {
+    const handleThumbPositionOnFontSizeChange = useCallback(() => {
+        //console.log("handleThumbPositionOnFontSizeChange");
+        if (!contentRef.current) {
             return;
         }
 
-        isResizing.current = true;
+        isScrolling.current = false;
         contentRef.current.scrollTop = (contentRef.current.scrollHeight - contentRef.current.clientHeight) * percentPast.current;
-    }, [fontSize, scrollTrackInnerRef, scrollThumbRef, contentRef]);
+    }, [fontSize, scrollTrackInnerRef, contentRef]);
+
+    const handleThumbPositionOnResize = useCallback(() => {
+        console.log("handleThumbPositionOnResize");
+        if (!scrollTrackInnerRef.current || !scrollThumbRef.current) {
+            return;
+        }
+        const trackWidthRem = (scrollTrackInnerRef.current.clientWidth - scrollThumbRef.current.clientWidth) / fontSize;
+        console.log(scrollTrackInnerRef.current.clientWidth, scrollThumbRef.current.clientWidth, fontSize)
+        const newLeft = (percentPast.current * trackWidthRem);
+        scrollThumbRef.current.style.left = newLeft + "rem";
+        console.log(newLeft, percentPast.current)
+    }, [scrollTrackInnerRef, scrollThumbRef, fontSize]);
 
     useEffect (() => {
-        handleThumbPositionOnResize();
+        handleThumbPositionOnFontSizeChange();
         contentRef.current?.addEventListener('scroll', handleThumbPositionOnScroll);
 
         return () => {
@@ -142,6 +153,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
             const deltaY = (e.clientX - scrollStartPosition) * ((contentScrollHeight - numberOfSections * trackheight) / trackWidth);
             const newScrollTop = Math.min(initialScrollTop + deltaY, contentScrollHeight - contentOffsetHeight);
             contentRef.current.scrollTop = newScrollTop;
+            
             console.log(newScrollTop, contentRef.current.scrollTop);
         }
         }, [isDragging, scrollStartPosition]);

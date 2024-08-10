@@ -73,18 +73,24 @@ const AboutMeSection = () => {
     return (
     <section id="about_me" className={CB.outer}>
         <div className={cx(CB.inner, AM.outer)}>
-            <div className={AM.inner}>
+            {/* <div className={AM.inner}>
                 <div className={AM.mainText}>
                     <h1><span>{isMobile ? "Hi! I’m Angsar" : "Hi! I’m Aidarbek Angsar"}</span><br></br>
                     a skilled {returnText(isMobile, text)}</h1>   
                 </div>
                 <div className={AM.left}>
-                    <p className={AM.brown}></p>
-                    <p></p>
-                    <p className={AM.brown}></p>
+                    <p className={AM.brown}>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    </p>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                    <p className={AM.brown}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
                 </div>
-                <div className={AM.right}></div>
-            </div>
+                <div className={AM.right}>
+                    <div className={AM.right_inner}>
+                        <img src={require("../../images/mainPhoto.jpg")} alt="Main Photo" />
+                    </div>
+                </div>
+            </div> */}
         </div>
     </section>
 )};
