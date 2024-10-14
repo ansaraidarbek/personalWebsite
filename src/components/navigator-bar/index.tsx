@@ -16,9 +16,11 @@ interface Store {
 const numberOfSections = 4;
 
 const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement>}) =>{
+    const ResizeSensor = require('css-element-queries/src/ResizeSensor.js');
     const scrollThumbRef = useRef<HTMLDivElement|null>(null);
     const scrollTrackOuterRef = useRef<HTMLDivElement|null>(null);
     const scrollTrackInnerRef = useRef<HTMLDivElement|null>(null);
+    const outerNavBoxRef = useRef<HTMLDivElement|null>(null);
     const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
     const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
     const [isDragging, setIsDragging] = useState(false);
@@ -90,7 +92,8 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
         }
       }, [contentRef, scrollTrackInnerRef, scrollThumbRef, fontSize, isScrolling]);
 
-    const handleThumbPositionOnFontSizeChange = useCallback(() => {
+    const handleThumbPositionChange = useCallback(() => {
+        console.log("changing box");
         //console.log("handleThumbPositionOnFontSizeChange");
         if (!contentRef.current) {
             return;
@@ -98,6 +101,7 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
 
         isScrolling.current = false;
         contentRef.current.scrollTop = (contentRef.current.scrollHeight - contentRef.current.clientHeight) * percentPast.current;
+        handleThumbPositionOnResize();
     }, [fontSize, scrollTrackInnerRef, contentRef]);
 
     const handleThumbPositionOnResize = useCallback(() => {
@@ -112,10 +116,16 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
         console.log(newLeft, percentPast.current)
     }, [scrollTrackInnerRef, scrollThumbRef, fontSize]);
 
-    useEffect (() => {
-        handleThumbPositionOnFontSizeChange();
-        contentRef.current?.addEventListener('scroll', handleThumbPositionOnScroll);
 
+    useEffect (() => {
+
+        // add resize functionality to thumb
+        handleThumbPositionChange();
+        new ResizeSensor(outerNavBoxRef.current, handleThumbPositionOnScroll);
+
+
+        // add scroll functionality to thumb
+        contentRef.current?.addEventListener('scroll', handleThumbPositionOnScroll);
         return () => {
             contentRef.current?.removeEventListener('scroll', handleThumbPositionOnScroll);
         };
@@ -172,8 +182,8 @@ const NavigatorBar = memo(({contentRef} : {contentRef : RefObject<HTMLDivElement
     }, [handleThumbMousemove, handleThumbMouseup]);
 
     return (
-        <div  ref= {scrollTrackOuterRef} className={NB.main}>
-            <div className={NB.outer}>
+        <div ref = {scrollTrackOuterRef} className={NB.main}>
+            <div ref = {outerNavBoxRef} className={NB.outer}>
                 <div ref={scrollTrackInnerRef} className={NB.inner} >
                     <NavButton title={"About me"} clicked = {clicked} num={0}/>
                     <NavButton title={"Skills"} clicked = {clicked} num={1}/>

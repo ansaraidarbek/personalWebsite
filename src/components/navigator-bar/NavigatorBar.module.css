@@ -20,7 +20,7 @@
     height: 2.245rem;
     flex-basis: 21.404rem;
     flex-grow: 0.199;
-    background-color: #F2F0E7;
+    background-color: #F0F0F0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,7 +52,7 @@
 .inner button{
     font-size: 0.77rem;
     font-family: OldenBurg, sans-serif;
-    color: #01856D;
+    color: #006A4E;
     border: none;
     background-color: transparent;
     cursor: pointer;

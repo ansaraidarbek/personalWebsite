@@ -1,10 +1,18 @@
 .outer {
-    display: none;
+    position: absolute;
+    left: 22.098rem;
+    max-width: 17.068rem;
+    min-width: 11.573rem;
+    width: 35%;
+    height: 3.427rem;
+    background-color: black;
+    top: 18.884rem;
 }
 
 
 @media only screen and (aspect-ratio < 1) {
     .outer {
+        top: unset;
         width: 100%;
         display: flex;
         justify-content: center;
